@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        h1, h2, h3 {
+            color: #0070ba;
+        }
+        h2 {
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .footer img {
+            max-width: 100px;
+            margin: 5px;
+        }
+        .delivery-images {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p>Dear {{ user_name }},</p>
+        <p>Thank you for your order. Your order has been completed successfully with ids <br>
+            <b>Transaction ID: {{ token }}<br>
+            Invoice Number: {{invoice}}</b></p>
+        <h2>Order Receipt</h2>
+        <h3>Items Purchased:</h3>
+        <ul>
+            {% for item in order_items %}
+            <li>
+                <strong>{{ item.menu_item.name }}</strong> <br>
+                Quantity: {{ item.quantity }}<br>
+                Price: {{ item.menu_item.price }} GBP
+            </li>
+            {% endfor %}
+        </ul>
+        
+        <p><strong>Total Price:</strong> {{ total_price }} GBP</p><br>
+
+        <div class="footer">
+            <p>Regards,<br>Online Kitchen</p>
+        </div>
+    </div>
+</body>
+</html>

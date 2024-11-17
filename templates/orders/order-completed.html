@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Order Completed | Hull's Kitchen
+{% endblock %}
+
+{% block content %}
+<script>
+    setTimeout(function() {
+        window.location.href = '/';
+    }, 10000);  // Redirect to home page after 10 seconds
+</script>
+<section class="register">
+    <section class="inner">
+        <p class="order-completed" style="text-align:center;color:green;">Your order was successful. You will receive your food shortly.</p>
+        {% if transaction_id %}
+            <p class="transaction-details" style="text-align:center;">Transaction ID: {{ transaction_id }}</p>
+        {% else %}
+            <p class="transaction-details" style="text-align:center;color:red;">Transaction ID: Not Available</p>
+        {% endif %}
+        <p class="transaction-details" style="text-align:center;">Invoice Number: {{ invoice_number }}</p>
+    </section>
+</section>
+{% endblock %}

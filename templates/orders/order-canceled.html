@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Order Canceled | Hull's Kitchen
+{% endblock %}
+
+{% block content %}
+<script>
+    setTimeout(function() {
+        window.location.href = '/';
+    }, 10000);  // Redirect to home page after 10 seconds
+</script>
+<section class="register">
+    <section class="inner">
+        <p class="order-canceled" style="text-align:center;color:red;">Your order has been canceled. You will not be charged.</p>
+    </section>
+</section>
+{% endblock %}

@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Include Google Fonts or other font links -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Include CSS files -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+      .paypal-button {
+          display: flex;
+          justify-content: center;
+          margin-top: 20px;
+      }
+      .paypal-button a {
+          display: inline-flex;
+          align-items: center;
+          padding: 10px 20px;
+          font-size: 16px;
+          color: #fff;
+          background-color: #0070ba;
+          border-radius: 5px;
+          text-decoration: none;
+          border: 1px solid #005ea6;
+      }
+      .paypal-button a:hover {
+          background-color: #005ea6;
+      }
+      .paypal-button img {
+          height: 20px; /* Adjust as needed */
+          margin-right: 8px; /* Space between the logo and text */
+      }
+  </style>
+
+    <!-- Add other head elements -->
+    {% block head %} {% endblock %}
+  </head>
+
+  <body>
+    <section class="outer__wrapper">
+      <section class="main__overlay"></section>
+      <header class="">
+        <section class="container">
+          <a href="/">
+            <img src="{% static 'imgs/hull_logo.svg' %}" alt="Hull Kitchen" />
+          </a>
+
+          <nav>
+            <ul>
+              {% if user.is_authenticated %}
+              <!-- Display links for logged-in users -->
+              <li>Hello, {{ user.name }}</li>
+              {% comment %} <li><a href="{% url 'orders:orders' %}">My Orders</a></li> {% endcomment %}
+              <li><a href="{% url 'users:logout' %}">Logout</a></li>
+              {% else %}
+              <!-- Display links for users who are not logged in -->
+              <li><a href="{% url 'users:register' %}">Register</a></li>
+              <li><a href="{% url 'users:login' %}">Login</a></li>
+              {% endif %}
+            </ul>
+          </nav>
+        </section>
+      </header>
+
+      <!-- Include the main content -->
+      <main id="main__content" class="main__content">
+        <section class="container">{% block content %} {% endblock %}</section>
+      </main>
+
+      <footer class="">
+        <section class="container">&copy; Kitchen, 2024</section>
+      </footer>
+    </section>
+    <!-- Include JavaScript files -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=Ac0pvStuZgV_DpEHly7VYxw7AXxJB-Ls0ptuDVd5SwZ0mHfzR51u_VkUZ7aBdDtzS3iJdsZkgubK-4o8&currency=GBP"></script>
+
+    <script>
+      paypal.Buttons({
+        createOrder: function (data, actions) {
+          return actions.order.create({
+            purchase_units: [
+              {
+                amount: {
+                  value: "{{ total_sum }}",
+                },
+              },
+            ],
+          });
+        },
+
+        onApprove: function (data, actions) {
+          return actions.order.capture().then(function (Details) {
+            console.log(Details);
+
+            if (Details.status === "COMPLETED") {
+            window.location.href = `/order-completed?id=${Details.id}`
+            }
+          });
+        },
+      }).render("#paypal__btn__container")
+    </script>
+
+    <script>
+      document.getElementById('cashPaymentButton').addEventListener('click', function() {
+        document.getElementById('cashPaymentPopup').style.display = 'block';
+    });
+    </script>
+  </body>
+</html>

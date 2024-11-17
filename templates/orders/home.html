@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Home | Hull's
+Kitchen {% endblock %} 
+
+{% block content %}
+<section id="cashPaymentPopup" class="popup-container" style="display: none;">
+  <div class="popup-content">
+    <p>Order Code: {{ order_code }}</p>
+    <p>Please use this code for cash payment.</p>
+    <form action="{% url 'orders:order-completed-cash' %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="order_code" value="{{ order_code }}">
+      <button type="submit" class="popup-button">OK</button>
+  </form>
+  </div>
+</section>
+<section class="hero">
+  <h1>Real West African Food. Delivered Real Quick.</h1>
+  <p>
+    Jollof Rice, Suya Chicken, Dodo, Efo Stew, Pottage Beans, Fufu – yes, West
+    African food is as fun and as fabulous as it sounds. A bright and brilliant
+    blend of the diverse cooking traditions, styles and tastes
+  </p>
+</section>
+
+<section class="menu__cart">
+  <section class="menu">
+    <h2>Hot Menu</h2>
+
+    <!-- Display messages -->
+    {% for message in messages %}
+    <small
+      class="alert {% if message.tags == 'error' %} alert-danger {% elif message.tags == 'warning' %} alert-warning {% elif message.tags == 'success' %} alert-success {% else %} alert-info {% endif %}"
+    >
+      {{ message }}
+    </small>
+    {% endfor %}
+
+    <section class="menu__list">
+      {% for item in items %}
+      <div class="menu__card">
+        <img src="{{ item.image.url }}" alt="{{ item.name }}" />
+        <div class="menu__card-content">
+          <section class="details">
+            <h3 class="menu__card-title">{{ item.name }}</h3>
+            <p class="menu__card-description">{{ item.description }}</p>
+            <p class="menu__card-price">&#163;{{ item.price }}</p>
+          </section>
+          <section class="order__section">
+            <form method="POST" action="{% url 'orders:add_order' %}">
+              {% csrf_token %}
+              <input
+                type="hidden"
+                name="item_id"
+                id="item_id"
+                value="{{ item.id }}"
+                class="form-control"
+              />
+              <input
+                type="number"
+                name="qty"
+                id="qty"
+                min="1"
+                class="form-control"
+                placeholder="Qty"
+                required
+              />
+              <button type="submit" class="order__btn" id="order-btn">
+                Add
+              </button>
+            </form>
+          </section>
+        </div>
+      </div>
+      {% endfor %}
+    </section>
+  </section>
+
+  <section class="cart">
+    <h3>Your Orders</h3>
+
+    {% if added_items %}
+    <section class="order__list">
+      {% for item in added_items %}
+      <div class="cart__card">
+        <img
+          src="{{ item.menu_item.image.url }}"
+          alt="{{ item.menu_item.name }}"
+        />
+        <div class="cart__content">
+          <h3 class="menu__card-title">{{ item.menu_item.name }}</h3>
+          <p class="menu__card-description">
+            {{ item.quantity }} x &#163;{{ item.menu_item.price }} =
+            &#163;{{item.total_price }}
+          </p>
+        </div>
+      </div>
+      {% endfor %} {% if added_items %}
+      <p class="total">Total: £{{ total_sum }}</p>
+      {% endif %}
+    </section>
+    
+    <section class="paypal-button">
+      {% if paypal_approval_url %}
+      <a href="{{ paypal_approval_url }}" class="btn btn-primary">
+          <img src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" alt="Pay with PayPal">
+          Pay with PayPal
+      </a>
+      {% else %}
+          <p>Error creating PayPal payment. Please try again later.</p>
+      {% endif %}   
+    </section>
+    <section>
+      <button id="cashPaymentButton" class="cash" >Pay with Cash</button>
+    </section>
+
+    <!-- <button class="primary__btn">Pay with PayPal</button> -->
+    {% comment %} <section id="paypal__btn__container"></section> {% endcomment %}
+    {% else %}
+    <h5>No Orders</h5>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}

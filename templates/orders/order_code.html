@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% comment %} <section id="cashPaymentPopup" class="popup-container" style="display: block;">
+    <div class="popup-content">
+      <p>Order Code: {{ order_code }}</p>
+      <p>Please use this code for cash payment.</p>
+      <form action="{% url 'orders:order-completed-cash' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="order_code" value="{{ order_code }}">
+        <button type="submit" class="popup-button">OK</button>
+    </form>
+    </div>
+  </section> {% endcomment %}
+{% endblock %}
