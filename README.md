@@ -1,4 +1,4 @@
-niversity Catering Services Online Payment System
+university Catering Services Online Payment System
 # Overview
 This project aims to enhance the student experience by introducing an innovative online catering system with PayPal as the primary payment method. By leveraging PayPal's global acceptance and secure transaction process, the system ensures a seamless and reliable online payment solution. The project is implemented using Python and the Django web framework, integrating PayPal API in a sandbox environment for testing and development purposes.
 
